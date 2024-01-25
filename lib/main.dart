@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         title: 'Namer App',
         theme: ThemeData(
           useMaterial3: true,
-          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 255, 7, 222)),
+          colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 241, 98, 218)),
         ),
         home: MyHomePage(),
       ),
@@ -27,6 +27,11 @@ class MyApp extends StatelessWidget {
 
 class MyAppState extends ChangeNotifier {
   var current = WordPair.random();
+
+  void getNext(){
+    current = WordPair.random();
+    notifyListeners();
+  }
 }
 
 class MyHomePage extends StatelessWidget {
@@ -38,18 +43,21 @@ class MyHomePage extends StatelessWidget {
 
 
     return Scaffold(
-      body: Column(
-        children: [
-          Text('A randomly generated username:'),
-          BigCard(pair: pair),
-
-          ElevatedButton(onPressed: ()
-          {
-            print('button pressed!');
-          },
-          child: Text('Next'),
-          ),
-        ],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('A randomly generated username:'),
+            BigCard(pair: pair),
+        
+            ElevatedButton(onPressed: ()
+            {
+              appState.getNext();
+            },
+            child: Text('Next'),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -65,6 +73,18 @@ class BigCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(pair.asPascalCase);
+    var theme = Theme.of(context);
+
+    var style = theme.textTheme.displayMedium!.copyWith(
+      color: theme.colorScheme.onPrimary,
+    );
+
+    return Card(
+      color: theme.colorScheme.primary,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(pair.asPascalCase, style: style),
+      ),
+    );
   }
 }
