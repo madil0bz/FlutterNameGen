@@ -35,29 +35,35 @@ class MyAppState extends ChangeNotifier
     notifyListeners();
   }
 
-  var favourites = <WordPair>[];
-  void toggleFavourite()
+  var favorites = <WordPair>[];
+  void toggleFavorite()
   {
-    if (favourites.contains(current))
+    if (favorites.contains(current))
     {
-      favourites.remove(current);
+      favorites.remove(current);
     }
     
     else
     {
-      favourites.add(current);
+      favorites.add(current);
     }
     notifyListeners();
   }
 }
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatelessWidget 
+{
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     var pair = appState.current;
 
-
+   IconData icon;
+    if (appState.favorites.contains(pair)) {
+      icon = Icons.favorite;
+    } else {
+      icon = Icons.favorite_border;
+    }
 
     return Scaffold(
       body: Center(
@@ -67,11 +73,25 @@ class MyHomePage extends StatelessWidget {
             
             BigCard(pair: pair),
             SizedBox(height: 15),
-            ElevatedButton(onPressed: ()
-            {
-              appState.getNext();
-            },
-            child: Text('Next'),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                 ElevatedButton.icon(
+                  onPressed: () {
+                    appState.toggleFavorite();
+                  },
+                  icon: Icon(icon),
+                  label: Text('Like'),
+                ),
+                SizedBox(width: 10),
+
+                ElevatedButton(onPressed: ()
+                {
+                  appState.getNext();
+                },
+                child: Text('Next'),
+                ),
+              ],
             ),
           ],
         ),
