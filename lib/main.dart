@@ -25,11 +25,28 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class MyAppState extends ChangeNotifier {
+class MyAppState extends ChangeNotifier 
+{
   var current = WordPair.random();
 
-  void getNext(){
+  void getNext()
+  {
     current = WordPair.random();
+    notifyListeners();
+  }
+
+  var favourites = <WordPair>[];
+  void toggleFavourite()
+  {
+    if (favourites.contains(current))
+    {
+      favourites.remove(current);
+    }
+    
+    else
+    {
+      favourites.add(current);
+    }
     notifyListeners();
   }
 }
@@ -47,9 +64,9 @@ class MyHomePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text('A randomly generated username:'),
+            
             BigCard(pair: pair),
-        
+            SizedBox(height: 15),
             ElevatedButton(onPressed: ()
             {
               appState.getNext();
